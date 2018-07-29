@@ -1,15 +1,25 @@
-require('dotenv').config() // .env 환경설정 불러오기
-const Koa = require('koa');
-const Router = require('koa-router');
-const bodyParser = require('koa-bodyparser');
+require('dotenv').config(); // .env 환경설정 불러오기
 
+// 코아 사용
+const Koa = require('koa');
 const app = new Koa();
-const router = new Router();
+
+// 몽구스
+const mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_URI)
+  .then((response)=>{
+    console.log("'Successfully connected to mongodb");
+  }).catch((error)=>{
+    console.error(error);
+  });
 
 //바디파서 사용
+const bodyParser = require('koa-bodyparser');
 app.use(bodyParser());
 
 // 라우트 
+const Router = require('koa-router');
+const router = new Router();
 const routeBundle = require('routes');
 router.use('', routeBundle.routes());
 app.use(router.routes()).use(router.allowedMethods());
