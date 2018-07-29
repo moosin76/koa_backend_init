@@ -6,12 +6,13 @@ const app = new Koa();
 
 // 몽구스
 const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGO_URI)
-  .then((response)=>{
-    console.log("'Successfully connected to mongodb");
-  }).catch((error)=>{
-    console.error(error);
-  });
+mongoose.connect(process.env.MONGO_URI);
+mongoose.connection.on('error',(err)=>{
+  console.error("MongoDB connection error");
+});
+mongoose.connection.on('open', ()=>{
+  console.log("Successfully connected to mongodb");
+});
 
 //바디파서 사용
 const bodyParser = require('koa-bodyparser');
